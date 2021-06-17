@@ -176,14 +176,15 @@ if __name__ == "__main__":
     """
 
     print('PYTHON IS RUNNING')
-    producer: ClientSocket = ClientSocket("server",10042)
     if os.environ.get("MYAPP_DOCKER", False):
+        producer: ClientSocket = ClientSocket("server",10042)
         with open('commands.txt', encoding='utf8') as f:
             for line in f:
                 producer.parseInput(line)
                 print(producer.get_message())
                 time.sleep(1)
     else:
+        producer: ClientSocket = ClientSocket("localhost",10042)
         stay_log = True
         while stay_log:
             menu = qprompt.Menu()

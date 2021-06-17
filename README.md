@@ -7,35 +7,58 @@ A picture is better than hundreds of words
 ![Alt text](./docs/schema.png "Architecture")
 
 ## 📦 Installation
-1. Build the Docker images. One for Kotlin server deployment and the other for Python client
+The application can be deployed on Docker or in a Native enviroment
+#### Docker
+1. Install docker
 ```console
-username@hostname:~$ docker build -t queue:<tag> -f ./serverDeploy .
+username@hostname:~$ apt install -Y docker
+```
+2. Use the build.sh script to create the needed Docker images
+```console
+username@hostname:~$ ./build.sh docker
+```
+3. Use the run.sh script to deploy the architecture
+```console
+username@hostname:~$ ./run.sh docker
+```
+#### Native
+1. Install the needed package
+```console
+username@hostname:~$ apt install -Y openjdk-8-jdk python3 pip3
 ```
 ```console
-username@hostname:~$ docker build -t python_client:<tag> -f ./pythonDockerFile .
+username@hostname:~$ wget https://services.gradle.org/distributions/gradle-6.9.0-bin.zip
+username@hostname:~$ sudo mkdir /opt/gradle
+username@hostname:~$ sudo unzip -d /opt/gradle gradle-6.9.0-bin.zip
+username@hostname:~$ export PATH=$PATH:/opt/gradle/gradle-6.9.0/bin
 ```
-2. Run docker-compose to setup the architecture
+2. Use build.sh script to create the jar and install dependencies
 ```console
-username@hostname:~/Docker$ docker-compose up -d
+username@hostname:~$ ./build.sh
 ```
-3. BUG: Restart the the restful server container after a dozen of seconds
-4. Query the server via any preferred HTTP client.
+3. Use the run.sh script to start both server and client
+```console
+username@hostname:~$ ./run.sh
+```
 
 ## Requirements
-- [X]  Application should be capable of handling duplicate values
-- [X]  Avoid using an additional external database to store the data
-- [X]  The application should be able to read the tracking data from a kafka topic
+- [X]  Application should be follow the command protocol defined in the given PDF.
+- [X]  The system should perform well as the number of requests per second increases.
+- [X]  The server should listen for connections on TCP port 10042.
 - [X]  The application server should be implemented in any JVM compatible language
-- [X]  To aggregate from second statistics to minute statistics an average should be used
-- [ ]  The application should be production ready and able to scale to high workloads, a high number of concurrent reads
+- [X]  The server must support at least a single client at a time. The server may optionally support multiple simultaneous clients.
 
 ## Known Issues
-1. If the Kafka Topic is not yet set up the server crashes
-2. Very hard to do unit test, therefore no testing is done.
-3. Everything about time is processing time
-4. 
+1. Input strings are not checked
+2. The system is not easy to scale horizontaly 
 
 ## Scalability Consideration
+The way the server is build doesn't let the system to be horizontally scalable. Add new server instances is not enough to scale the service as the state is not shared between istances. 
+Scalability is however well achieved by improving the server. All the data structures are thread-safe and the application support multiple concurrent connection.
+To solve horizontal scaling two path are available:
+- Develop any type of consistency (eventual, casual, or other) to make more instances share a common state.
+- Use OpenSource source projects, i.g. Kafka, to maintain a consistent, always available state and then deploy few instances that handle the application logic and keep track of the seeking index published as well on a Kafka topic. 
+
 
 ## Dependencies and Technologies
 This project leverages a different set of technologies
