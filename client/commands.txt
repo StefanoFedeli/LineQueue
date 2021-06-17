@@ -1,0 +1,11 @@
+GET 1
+PUT the
+PUT quick brown
+PUT fox jumps over the
+PUT lazy dog
+GET 2
+GET 42
+GET 1
+PUT , heck
+SHUTDOWN
+QUIT

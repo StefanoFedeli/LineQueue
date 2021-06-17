@@ -1,0 +1,13 @@
+#version: '3'
+services:
+    client:
+        image: python_client:v0.1
+        command: python3 client.py
+        depends_on:
+            - "server"
+        volumes:
+            - ../client:/app
+    server:
+        image: queue:v0.1
+        ports:
+            - "10042:10042"
