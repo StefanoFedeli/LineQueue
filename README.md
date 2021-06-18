@@ -1,10 +1,8 @@
 # Case Study LineQueue
-
 System that is capable of maintaining a queue of text lines for access by clients.
 
 ## Architecture
-A picture is better than hundreds of words
-![Alt text](./docs/schema.png "Architecture")
+Simple Client-Server architecture on 2 physical layers and 3 logical layers.
 
 ## 📦 Installation
 The application can be deployed on Docker or in a Native enviroment
